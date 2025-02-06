@@ -594,6 +594,9 @@ int flag_prologue_bugfix = 0;
 /* Fix buggy DWARF line info generation.  */
 int flag_fixed_debug_line_info = 0;
 
+/* Fix prologue bug in new compiler.  */
+int flag_prologue_bugfix = 0;
+
 typedef struct
 {
     char *string;
@@ -742,6 +745,13 @@ lang_independent_options f_options[] =
 #endif
     {"fix-debug-line", &flag_fixed_debug_line_info, 1,
      "Generate fixed DWARF line info"},
+#ifndef OLD_COMPILER
+    /* This flag fixes a bug in the newer agbcc version that causes `lr` to be
+       saved onto the stack in functions where it is not necessary. This is
+       needed to produce matching code for certain GBA games.  */
+    {"prologue-bugfix", &flag_prologue_bugfix, 1,
+     "Prevent unnecessary saving of the lr register to the stack"},
+#endif
 };
 
 #define NUM_ELEM(a)  (sizeof (a) / sizeof ((a)[0]))
@@ -1064,7 +1074,7 @@ fatal_io_error(char *name)
 void
 fatal_insn(char *message, rtx insn)
 {
-    error(message);
+    error("%s", message);
     debug_rtx(insn);
     if (asm_out_file)
         fflush(asm_out_file);
