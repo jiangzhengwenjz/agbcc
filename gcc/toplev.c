@@ -594,9 +594,6 @@ int flag_prologue_bugfix = 0;
 /* Fix buggy DWARF line info generation.  */
 int flag_fixed_debug_line_info = 0;
 
-/* Fix prologue bug in new compiler.  */
-int flag_prologue_bugfix = 0;
-
 typedef struct
 {
     char *string;
